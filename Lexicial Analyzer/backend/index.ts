@@ -35,10 +35,6 @@ function lexer(input) {
   const DATA_TYPES = /int|float|double/;
   const COMPARISON_OPERATORS = /[\=\!\<\>]/;
   const BRACES = /[\{\}]/;
-  // const INTEGER = /-?\d+/;
-  // const FLOAT = /-?\d*\.\d+/;
-  // const CHARACTER = /'.'/;
-  // const STRING = /"(?:[^"\\]|\\.)*"/;
   const WHITESPACE = /\s/;
   const PARENTHESES = /[()]/;
   const OPERATORS = /[+\-*\/]/;
@@ -71,7 +67,19 @@ function lexer(input) {
     }
 
     if (COMPARISON_OPERATORS.test(char)) {
-      tokens.push({ type: "OPERATOR", value: char, color: "#32cd32" });
+      if (COMPARISON_OPERATORS.test(input[current + 1])) {
+        tokens.push({
+          type: "OPERATOR",
+          value: `${char}${input[current + 1]}`,
+          color: "#32cd32",
+        });
+      } else {
+        tokens.push({
+          type: "OPERATOR",
+          value: char,
+          color: "#32cd32",
+        });
+      }
       current++;
       continue;
     }
@@ -99,7 +107,8 @@ function lexer(input) {
 
     // Parse operators
     if (OPERATORS.test(char)) {
-      tokens.push({ type: "OPERATOR", value: char, color: "#9400d3" });
+      if (OPERATORS.test)
+        tokens.push({ type: "OPERATOR", value: char, color: "#9400d3" });
       current++;
       continue;
     }
@@ -135,6 +144,10 @@ function lexer(input) {
     // Parse identifiers (e.g. variable names)
     if (IDENTIFIERS.test(char)) {
       let value = "";
+
+      while (DATA_TYPES.test(char)) {
+        console.log(char);
+      }
 
       while (IDENTIFIERS_AND_NUMBERS.test(char)) {
         value += char;
